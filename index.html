@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Educativo: Oraciones Unimembres y Bimembres</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>Desafío Sintáctico</h1>
+            <p>Clasifica correctamente las oraciones en <strong>Unimembre (OU)</strong> o <strong>Bimembre (OB)</strong>.</p>
+        </header>
+
+        <div id="quiz-box">
+            <div class="stats">
+                <span id="progress">Pregunta 1 de 10</span>
+                <span id="score">Puntuación: 0</span>
+            </div>
+
+            <div class="sentence-card">
+                <h2 id="sentence-text">Cargando oración...</h2>
+            </div>
+
+            <div class="button-group">
+                <button id="btn-ou" class="btn unimembre" onclick="checkAnswer('OU')">Unimembre (OU)</button>
+                <button id="btn-ob" class="btn bimembre" onclick="checkAnswer('OB')">Bimembre (OB)</button>
+            </div>
+
+            <div id="feedback" class="hidden"></div>
+            
+            <button id="next-btn" class="btn next hidden" onclick="nextQuestion()">Siguiente Pregunta</button>
+        </div>
+
+        <div id="result-box" class="hidden">
+            <h2>¡Juego Terminado!</h2>
+            <p id="final-score">Tu puntuación final es: 0 de 10</p>
+            <button class="btn restart" onclick="restartGame()">Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
