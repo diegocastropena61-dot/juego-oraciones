@@ -13,12 +13,12 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #14532d 0%, #064e3b 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #f8fafc;
+            color: #f0fdf4;
             padding: 1rem;
         }
 
@@ -34,7 +34,7 @@
         }
 
         header h1 {
-            color: #0284c7;
+            color: #b45309;
             margin-bottom: 0.5rem;
             font-size: 1.8rem;
         }
@@ -68,7 +68,7 @@
         }
 
         .input-group input:focus {
-            border-color: #0284c7;
+            border-color: #d97706;
         }
 
         .stats {
@@ -122,20 +122,20 @@
         }
 
         .btn.unimembre {
-            background-color: #d97706;
+            background-color: #ea580c;
         }
 
         .btn.bimembre {
-            background-color: #059669;
+            background-color: #16a34a;
         }
 
         .btn.primary, .btn.restart {
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             width: 100%;
         }
 
         .btn.next {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             width: 100%;
             margin-top: 1rem;
         }
@@ -178,11 +178,10 @@
         }
 
         .grade-highlight {
-            color: #0284c7;
+            color: #d97706;
             font-size: 1.4rem;
         }
 
-        /* Tabla de registros guardados para el docente */
         .records-section {
             margin-top: 2rem;
             text-align: left;
@@ -410,7 +409,6 @@
         const resName = document.getElementById("res-name");
         const recordsTableBody = document.getElementById("records-table-body");
 
-        // Cargar registros al iniciar la página
         document.addEventListener("DOMContentLoaded", loadRecords);
 
         function startGame() {
@@ -420,7 +418,6 @@
                 return;
             }
 
-            // Mezcla de Fisher-Yates para obtener oraciones totalmente aleatorias
             let shuffled = [...masterQuestions];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -484,13 +481,11 @@
             resultBox.classList.remove("hidden");
             resName.textContent = playerName;
             
-            // Cálculo de nota de 0.0 a 5.0 (Regla de tres: (score * 5) / 10)
             let grade = (score * 5.0) / 10.0;
 
             finalAciertos.textContent = score;
             finalGrade.textContent = grade.toFixed(1);
 
-            // Guardar en el almacenamiento local del navegador (localStorage)
             saveRecord(playerName, score, grade.toFixed(1));
         }
 
@@ -511,9 +506,8 @@
             }
 
             records.forEach(rec => {
-                let row = document.tr; // syntax fix below using insertRow or innerHTML template
                 let tr = document.createElement("tr");
-                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #0284c7; font-weight: bold;">${rec.grade}</span></td>`;
+                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #d97706; font-weight: bold;">${rec.grade}</span></td>`;
                 recordsTableBody.appendChild(tr);
             });
         }
