@@ -9,7 +9,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -30,12 +30,6 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         header h1 {
@@ -50,7 +44,6 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Pantalla de Inicio */
         .input-group {
             margin-bottom: 1.5rem;
             text-align: left;
@@ -77,7 +70,6 @@
             border-color: #6366f1;
         }
 
-        /* Estadísticas del juego */
         .stats {
             display: flex;
             justify-content: space-between;
@@ -118,7 +110,7 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s ease, background 0.2s, box-shadow 0.2s;
+            transition: transform 0.1s ease, box-shadow 0.2s;
             color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -128,22 +120,12 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
-
         .btn.unimembre {
             background-color: #f59e0b;
-        }
-        .btn.unimembre:hover {
-            background-color: #d97706;
         }
 
         .btn.bimembre {
             background-color: #10b981;
-        }
-        .btn.bimembre:hover {
-            background-color: #059669;
         }
 
         .btn.primary, .btn.restart {
@@ -185,7 +167,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
     </style>
 </head>
@@ -240,19 +222,73 @@
     </div>
 
     <script>
-        const questions = [
-            { text: "¡Llueve torrencialmente en la ciudad!", type: "OU", explanation: "Es unimembre porque tiene un verbo impersonal referido a fenómenos meteorológicos, sin sujeto." },
-            { text: "Los estudiantes aprobaron el examen de sintaxis.", type: "OB", explanation: "Es bimembre: tiene un sujeto ('Los estudiantes') y un predicado ('aprobaron el examen de sintaxis')." },
-            { text: "Había muchos participantes en el concurso.", type: "OU", explanation: "Es unimembre porque el verbo 'haber' es impersonal y no posee un sujeto gramatical." },
-            { text: "El viento soplaba con muchísima fuerza anoche.", type: "OB", explanation: "Es bimembre: el sujeto es 'El viento' y el predicado es 'soplaba con muchísima fuerza anoche'." },
-            { text: "¡Fuego!", type: "OU", explanation: "Es unimembre exclamativa; expresa un concepto completo pero carece de estructura de sujeto y predicado." },
-            { text: "Hace demasiado frío durante las mañanas de invierno.", type: "OU", explanation: "Es unimembre debido a que el verbo 'hacer' actúa de forma impersonal." },
-            { text: "Mi profesora favorita explicó la clase magistral.", type: "OB", explanation: "Es bimembre: sujeto ('Mi profesora favorita') y predicado ('explicó la clase magistral')." },
-            { text: "¡Silencio en la sala!", type: "OU", explanation: "Es unimembre nominal; transmite una orden directa sin descomponerse en sujeto y predicado." },
-            { text: "Varias aves migraban hacia el sur cálido.", type: "OB", explanation: "Es bimembre: sujeto ('Varias aves') y predicado ('migraban hacia el sur cálido')." },
-            { text: "Es tarde para salir de excursión.", type: "OU", explanation: "Es unimembre porque emplea el verbo copulativo 'ser' de forma impersonal para indicar tiempo." }
+        const masterQuestions = [
+            // UNIMEMBRES (OU)
+            { text: "¡Llueve!", type: "OU", explanation: "Es unimembre porque posee un verbo impersonal de fenómeno atmosférico, sin sujeto." },
+            { text: "¡Auxilio!", type: "OU", explanation: "Es unimembre exclamativa; transmite una expresión de ayuda sin estructura de sujeto y predicado." },
+            { text: "Hace mucho frío.", type: "OU", explanation: "Es unimembre debido a la impersonalidad del verbo 'hacer'." },
+            { text: "Es de noche.", type: "OU", explanation: "Es unimembre porque utiliza el verbo copulativo de forma impersonal para indicar tiempo." },
+            { text: "Había muchos invitados.", type: "OU", explanation: "Es unimembre porque el verbo 'haber' es impersonal y no admite sujeto gramatical." },
+            { text: "¡Fuego!", type: "OU", explanation: "Es una oración unimembre nominal de carácter exclamativo." },
+            { text: "¡Silencio, por favor!", type: "OU", explanation: "Es unimembre nominal; emite una orden directa sin descomponerse en sujeto y predicado." },
+            { text: "Truena fuerte.", type: "OU", explanation: "Es unimembre por tratarse de un fenómeno meteorológico expresado mediante verbo impersonal." },
+            { text: "Hubo un terremoto.", type: "OU", explanation: "Es unimembre dado que el verbo 'haber' actúa de forma impersonal." },
+            { text: "¡Qué alegría!", type: "OU", explanation: "Es unimembre nominal exclamativa sin nexo predicativo." },
+            { text: "Amanece temprano.", type: "OU", explanation: "Es unimembre porque refiere a un fenómeno de la naturaleza con verbo impersonal." },
+            { text: "¡Hola!", type: "OU", explanation: "Es unimembre de tipo fórmula social o interjección." },
+            { text: "Se vende casa.", type: "OU", explanation: "Es unimembre con estructura de pasiva refleja impersonal." },
+            { text: "¡Cuidado!", type: "OU", explanation: "Es unimembre de carácter imperativo/interjectivo." },
+            { text: "Hace calor hoy.", type: "OU", explanation: "Es unimembre por el uso impersonal del verbo 'hacer'." },
+            { text: "¡Prohibido fumar!", type: "OU", explanation: "Es unimembre impersonal con verbo en infinitivo." },
+            { text: "Es tarde.", type: "OU", explanation: "Es unimembre por el uso impersonal del verbo 'ser' al indicar tiempo." },
+            { text: "Hay demasiados problemas.", type: "OU", explanation: "Es unimembre por la naturaleza impersonal del verbo 'haber'." },
+            { text: "¡Bravo!", type: "OU", explanation: "Es unimembre interjectiva de aprobación." },
+            { text: "Relampaguea en la costa.", type: "OU", explanation: "Es unimembre debido al verbo impersonal de fenómeno meteorológico." },
+            { text: "¡Qué desastre!", type: "OU", explanation: "Es unimembre nominal exclamativa." },
+            { text: "Nevará mañana.", type: "OU", explanation: "Es unimembre por el verbo impersonal de clima." },
+            { text: "Se alquila apartamento.", type: "OU", explanation: "Es unimembre con marca de pasiva refleja impersonal." },
+            { text: "¡Socorro!", type: "OU", explanation: "Es unimembre interjectiva." },
+            { text: "Hace tres años de eso.", type: "OU", explanation: "Es unimembre con el verbo impersonal que indica transcurso temporal." },
+            { text: "¡Atención!", type: "OU", explanation: "Es unimembre nominal imperativa." },
+            { text: "Niebla densa.", type: "OU", explanation: "Es unimembre nominal descriptiva." },
+            { text: "¡Hasta luego!", type: "OU", explanation: "Es unimembre fórmula de cortesía o despedida." },
+            { text: "Huele a quemado.", type: "OU", explanation: "Es unimembre construida de forma impersonal." },
+            { text: "¡Dios mío!", type: "OU", explanation: "Es unimembre exclamativa nominal." },
+
+            // BIMEMBRES (OB)
+            { text: "El perro corre por el parque.", type: "OB", explanation: "Es bimembre: el sujeto es 'El perro' y el predicado 'corre por el parque'." },
+            { text: "María compró flores frescas.", type: "OB", explanation: "Es bimembre: sujeto explícito ('María') y predicado ('compró flores frescas')." },
+            { text: "Los niños juegan en la plaza.", type: "OB", explanation: "Es bimembre: sujeto ('Los niños') y predicado ('juegan en la plaza')." },
+            { text: "El sol brilla intensamente.", type: "OB", explanation: "Es bimembre: cuenta con sujeto ('El sol') y predicado ('brilla intensamente')." },
+            { text: "Mi hermano estudia medicina.", type: "OB", explanation: "Es bimembre: sujeto ('Mi hermano') y predicado ('estudia medicina')." },
+            { text: "Las aves migran hacia el sur.", type: "OB", explanation: "Es bimembre: sujeto ('Las aves') y predicado ('migran hacia el sur')." },
+            { text: "El profesor explicó la lección.", type: "OB", explanation: "Es bimembre: sujeto ('El profesor') y predicado ('explicó la lección')." },
+            { text: "Un coche rojo cruzó la calle.", type: "OB", explanation: "Es bimembre: sujeto ('Un coche rojo') y predicado ('cruzó la calle')." },
+            { text: "La sopa está muy caliente.", type: "OB", explanation: "Es bimembre: sujeto ('La sopa') y predicado ('está muy caliente')." },
+            { text: "Los vecinos organizaron una fiesta.", type: "OB", explanation: "Es bimembre: sujeto ('Los vecinos') y predicado ('organizaron una fiesta')." },
+            { text: "Esa novela ganó un premio.", type: "OB", explanation: "Es bimembre: sujeto ('Esa novela') y predicado ('ganó un premio')." },
+            { text: "Los gatos duermen plácidamente.", type: "OB", explanation: "Es bimembre: sujeto ('Los gatos') y predicado ('duermen plácidamente')." },
+            { text: "El viento soplaba con fuerza.", type: "OB", explanation: "Es bimembre: sujeto ('El viento') y predicado ('soplaba con fuerza')." },
+            { text: "Mi madre preparó un pastel.", type: "OB", explanation: "Es bimembre: sujeto ('Mi madre') y predicado ('preparó un pastel')." },
+            { text: "Los alumnos entregaron la tarea.", type: "OB", explanation: "Es bimembre: sujeto ('Los alumnos') y predicado ('entregaron la tarea')." },
+            { text: "El teléfono suena sin parar.", type: "OB", explanation: "Es bimembre: sujeto ('El teléfono') y predicado ('suena sin parar')." },
+            { text: "La luna ilumina la noche.", type: "OB", explanation: "Es bimembre: sujeto ('La luna') y predicado ('ilumina la noche')." },
+            { text: "Los turistas visitaron el museo.", type: "OB", explanation: "Es bimembre: sujeto ('Los turistas') y predicado ('visitaron el museo')." },
+            { text: "Un fuerte temblor asustó a todos.", type: "OB", explanation: "Es bimembre: sujeto ('Un fuerte temblor') y predicado ('asustó a todos')." },
+            { text: "El río lleva mucha agua.", type: "OB", explanation: "Es bimembre: sujeto ('El río') y predicado ('lleva mucha agua')." },
+            { text: "Las flores adornan el jardín.", type: "OB", explanation: "Es bimembre: sujeto ('Las flores') y predicado ('adornan el jardín')." },
+            { text: "El tren llegó con retraso.", type: "OB", explanation: "Es bimembre: sujeto ('El tren') y predicado ('llegó con retraso')." },
+            { text: "Mi abuela canta muy bien.", type: "OB", explanation: "Es bimembre: sujeto ('Mi abuela') y predicado ('canta muy bien')." },
+            { text: "Los jugadores celebraron el triunfo.", type: "OB", explanation: "Es bimembre: sujeto ('Los jugadores') y predicado ('celebraron el triunfo')." },
+            { text: "El cielo está completamente despejado.", type: "OB", explanation: "Es bimembre: sujeto ('El cielo') y predicado ('está completamente despejado')." },
+            { text: "Una fuerte tormenta canceló el vuelo.", type: "OB", explanation: "Es bimembre: sujeto ('Una fuerte tormenta') y predicado ('canceló el vuelo')." },
+            { text: "El mecánico arregló nuestro auto.", type: "OB", explanation: "Es bimembre: sujeto ('El mecánico') y predicado ('arregló nuestro auto')." },
+            { text: "Las estrellas brillan en el firmamento.", type: "OB", explanation: "Es bimembre: sujeto ('Las estrellas') y predicado ('brillan en el firmamento')." },
+            { text: "El joven pintor expuso sus obras.", type: "OB", explanation: "Es bimembre: sujeto ('El joven pintor') y predicado ('expuso sus obras')." },
+            { text: "La música suena en la radio.", type: "OB", explanation: "Es bimembre: sujeto ('La música') y predicado ('suena en la radio')." }
         ];
 
+        let questions = [];
         let currentIdx = 0;
         let score = 0;
         let playerName = "";
@@ -279,6 +315,11 @@
                 alert("Por favor, ingresa tu nombre para continuar.");
                 return;
             }
+
+            // Seleccionar 10 preguntas aleatorias del banco total cada vez que inicia
+            questions = [...masterQuestions].sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentIdx = 0;
+            score = 0;
 
             welcomeBox.classList.add("hidden");
             quizBox.classList.remove("hidden");
@@ -336,8 +377,6 @@
         }
 
         function restartGame() {
-            currentIdx = 0;
-            score = 0;
             resultBox.classList.add("hidden");
             welcomeBox.classList.remove("hidden");
             studentNameInput.value = "";
