@@ -293,7 +293,7 @@
 
             const current = questions[currentIdx];
             sentenceText.textContent = `"${current.text}"`;
-            progressEl.textContent = `Pregunta ${currentIdx + 1} de${questions.length}`;
+            progressEl.textContent = `Pregunta ${currentIdx + 1} de ${questions.length}`;
             scoreEl.textContent = `Puntuación: ${score}`;
         }
 
@@ -329,4 +329,16 @@
             quizBox.classList.add("hidden");
             resultBox.classList.remove("hidden");
             resName.textContent = playerName;
-            finalScore.textContent = `Has obtenido ${score} ac
+            finalScore.textContent = `Has obtenido ${score} aciertos de ${questions.length} posibles.`;
+        }
+
+        function restartGame() {
+            currentIdx = 0;
+            score = 0;
+            resultBox.classList.add("hidden");
+            welcomeBox.classList.remove("hidden");
+            studentNameInput.value = "";
+        }
+    </script>
+</body>
+</html>
