@@ -13,12 +13,12 @@
         }
 
         body {
-            background: linear-gradient(135deg, #14532d 0%, #064e3b 100%);
+            background: linear-gradient(135deg, #31103f 0%, #1e0b29 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #f0fdf4;
+            color: #f3e8ff;
             padding: 1rem;
         }
 
@@ -34,7 +34,7 @@
         }
 
         header h1 {
-            color: #b45309;
+            color: #7e22ce;
             margin-bottom: 0.5rem;
             font-size: 1.8rem;
         }
@@ -68,7 +68,7 @@
         }
 
         .input-group input:focus {
-            border-color: #d97706;
+            border-color: #7e22ce;
         }
 
         .stats {
@@ -122,20 +122,20 @@
         }
 
         .btn.unimembre {
-            background-color: #ea580c;
+            background-color: #b91c1c;
         }
 
         .btn.bimembre {
-            background-color: #16a34a;
+            background-color: #0369a1;
         }
 
         .btn.primary, .btn.restart {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            background: linear-gradient(135deg, #7e22ce 0%, #581c87 100%);
             width: 100%;
         }
 
         .btn.next {
-            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            background: linear-gradient(135deg, #0e7490 0%, #155e75 100%);
             width: 100%;
             margin-top: 1rem;
         }
@@ -178,7 +178,7 @@
         }
 
         .grade-highlight {
-            color: #d97706;
+            color: #7e22ce;
             font-size: 1.4rem;
         }
 
@@ -248,14 +248,14 @@
         <!-- PANTALLA DE BIENVENIDA -->
         <div id="welcome-box">
             <header>
-                <h1>📘 Desafío Sintáctico</h1>
-                <p>Clasifica oraciones <strong>Unimembres</strong> y <strong>Bimembres</strong> para registrar tu nota.</p>
+                <h1>🎓 Desafío Sintáctico</h1>
+                <p>Pon a prueba tus conocimientos sobre <strong>Oraciones Unimembres</strong> y <strong>Bimembres</strong>.</p>
             </header>
             <div class="input-group">
                 <label for="student-name">Ingresa tu nombre completo:</label>
-                <input type="text" id="student-name" placeholder="Ej. Carlos Mendoza" autocomplete="off">
+                <input type="text" id="student-name" placeholder="Ej. Ana Pérez" autocomplete="off">
             </div>
-            <button class="btn primary" onclick="startGame()">Comenzar Examen</button>
+            <button class="btn primary" onclick="startGame()">Comenzar Reto</button>
 
             <!-- Sección visible para el docente con los registros guardados en el navegador -->
             <div class="records-section" id="records-container">
@@ -507,7 +507,7 @@
 
             records.forEach(rec => {
                 let tr = document.createElement("tr");
-                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #d97706; font-weight: bold;">${rec.grade}</span></td>`;
+                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #7e22ce; font-weight: bold;">${rec.grade}</span></td>`;
                 recordsTableBody.appendChild(tr);
             });
         }
