@@ -275,7 +275,7 @@
             { text: "La luna ilumina la noche.", type: "OB", explanation: "Es bimembre: sujeto ('La luna') y predicado ('ilumina la noche')." },
             { text: "Los turistas visitaron el museo.", type: "OB", explanation: "Es bimembre: sujeto ('Los turistas') y predicado ('visitaron el museo')." },
             { text: "Un fuerte temblor asustó a todos.", type: "OB", explanation: "Es bimembre: sujeto ('Un fuerte temblor') y predicado ('asustó a todos')." },
-            { text: "El río lleva mucha agua.", type: "OB", explanation: "Es bimembre: sujeto ('El río') y predicado ('lleva mucha agua')." },
+            { text: "El río lleva mucha agua.", type: "OB", explanation: "Es bimembre: sujeto ('El río') and predicado ('lleva mucha agua')." },
             { text: "Las flores adornan el jardín.", type: "OB", explanation: "Es bimembre: sujeto ('Las flores') y predicado ('adornan el jardín')." },
             { text: "El tren llegó con retraso.", type: "OB", explanation: "Es bimembre: sujeto ('El tren') y predicado ('llegó con retraso')." },
             { text: "Mi abuela canta muy bien.", type: "OB", explanation: "Es bimembre: sujeto ('Mi abuela') y predicado ('canta muy bien')." },
@@ -284,7 +284,7 @@
             { text: "Una fuerte tormenta canceló el vuelo.", type: "OB", explanation: "Es bimembre: sujeto ('Una fuerte tormenta') y predicado ('canceló el vuelo')." },
             { text: "El mecánico arregló nuestro auto.", type: "OB", explanation: "Es bimembre: sujeto ('El mecánico') y predicado ('arregló nuestro auto')." },
             { text: "Las estrellas brillan en el firmamento.", type: "OB", explanation: "Es bimembre: sujeto ('Las estrellas') y predicado ('brillan en el firmamento')." },
-            { text: "El joven pintor expuso sus obras.", type: "OB", explanation: "Es bimembre: sujeto ('El joven pintor') y predicado ('expuso sus obras')." },
+            { text: "El joven pintor expuso sus obras.", type: "OB", explanation: "Es bimembre: sujeto ('Los jóvenes pintores' / 'El joven pintor') y predicado ('expuso sus obras')." },
             { text: "La música suena en la radio.", type: "OB", explanation: "Es bimembre: sujeto ('La música') y predicado ('suena en la radio')." }
         ];
 
@@ -316,8 +316,15 @@
                 return;
             }
 
-            // Seleccionar 10 preguntas aleatorias del banco total cada vez que inicia
-            questions = [...masterQuestions].sort(() => 0.5 - Math.random()).slice(0, 10);
+            // Mezcla avanzada (Fisher-Yates) para asegurar total aleatoriedad en cada intento
+            let shuffled = [...masterQuestions];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            // Toma 10 oraciones completamente al azar (pueden salir varias seguidas del mismo tipo o mezcladas)
+            questions = shuffled.slice(0, 10);
             currentIdx = 0;
             score = 0;
 
