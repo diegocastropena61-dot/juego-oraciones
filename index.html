@@ -13,27 +13,28 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #333;
+            color: #f8fafc;
             padding: 1rem;
         }
 
         .game-container {
             background: #ffffff;
+            color: #334155;
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             text-align: center;
         }
 
         header h1 {
-            color: #4338ca;
+            color: #0284c7;
             margin-bottom: 0.5rem;
             font-size: 1.8rem;
         }
@@ -67,7 +68,7 @@
         }
 
         .input-group input:focus {
-            border-color: #6366f1;
+            border-color: #0284c7;
         }
 
         .stats {
@@ -121,20 +122,20 @@
         }
 
         .btn.unimembre {
-            background-color: #f59e0b;
+            background-color: #d97706;
         }
 
         .btn.bimembre {
-            background-color: #10b981;
+            background-color: #059669;
         }
 
         .btn.primary, .btn.restart {
-            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             width: 100%;
         }
 
         .btn.next {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
             width: 100%;
             margin-top: 1rem;
         }
@@ -166,6 +167,78 @@
             margin-bottom: 0.5rem;
         }
 
+        .score-box {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1.2rem 0;
+            font-size: 1.1rem;
+            color: #1e293b;
+            font-weight: bold;
+        }
+
+        .grade-highlight {
+            color: #0284c7;
+            font-size: 1.4rem;
+        }
+
+        /* Tabla de registros guardados para el docente */
+        .records-section {
+            margin-top: 2rem;
+            text-align: left;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+
+        .records-section h3 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .records-table-container {
+            max-height: 160px;
+            overflow-y: auto;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 0.6rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            color: #334155;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -176,26 +249,48 @@
         <!-- PANTALLA DE BIENVENIDA -->
         <div id="welcome-box">
             <header>
-                <h1>🎓 Desafío Sintáctico</h1>
-                <p>Pon a prueba tus conocimientos sobre <strong>Oraciones Unimembres y Bimembres</strong>.</p>
+                <h1>📘 Desafío Sintáctico</h1>
+                <p>Clasifica oraciones <strong>Unimembres</strong> y <strong>Bimembres</strong> para registrar tu nota.</p>
             </header>
             <div class="input-group">
                 <label for="student-name">Ingresa tu nombre completo:</label>
-                <input type="text" id="student-name" placeholder="Ej. Ana Pérez" autocomplete="off">
+                <input type="text" id="student-name" placeholder="Ej. Carlos Mendoza" autocomplete="off">
             </div>
-            <button class="btn primary" onclick="startGame()">Comenzar Reto</button>
+            <button class="btn primary" onclick="startGame()">Comenzar Examen</button>
+
+            <!-- Sección visible para el docente con los registros guardados en el navegador -->
+            <div class="records-section" id="records-container">
+                <h3>
+                    <span>📋 Registros Guardados</span>
+                    <button class="btn-clear" onclick="clearRecords()">Borrar Historial</button>
+                </h3>
+                <div class="records-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Aciertos</th>
+                                <th>Nota (0-5)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records-table-body">
+                            <!-- Los registros se cargan dinámicamente aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- PANTALLA DE JUEGO -->
         <div id="quiz-box" class="hidden">
             <header>
-                <h1 id="greeting-title">¡Hola!</h1>
-                <p>Clasifica correctamente cada oración:</p>
+                <h1 id="greeting-title">¡Éxito!</h1>
+                <p>Selecciona la categoría correcta:</p>
             </header>
 
             <div class="stats">
                 <span id="progress">Pregunta 1 de 10</span>
-                <span id="score">Puntuación: 0</span>
+                <span id="score">Aciertos: 0</span>
             </div>
 
             <div class="sentence-card">
@@ -215,9 +310,13 @@
         <!-- PANTALLA DE RESULTADOS -->
         <div id="result-box" class="hidden">
             <div class="trophy">🏆</div>
-            <h2>¡Felicitaciones, <span id="res-name"></span>!</h2>
-            <p id="final-score" style="margin: 1.2rem 0; font-size: 1.1rem; color: #475569;">Tu puntuación final es: 0 de 10</p>
-            <button class="btn restart" onclick="restartGame()">Jugar de Nuevo 🔄</button>
+            <h2>¡Excelente trabajo, <span id="res-name"></span>!</h2>
+            <div class="score-box">
+                <p>Aciertos totales: <span id="final-aciertos">0</span> de 10</p>
+                <p style="margin-top: 0.5rem;">Calificación definitiva: <span id="final-grade" class="grade-highlight">0.0</span> / 5.0</p>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.2rem;">Tu resultado ha sido guardado automáticamente en este dispositivo.</p>
+            <button class="btn restart" onclick="returnHome()">Volver al Inicio 🔄</button>
         </div>
     </div>
 
@@ -306,16 +405,22 @@
         const nextBtn = document.getElementById("next-btn");
         const btnOU = document.getElementById("btn-ou");
         const btnOB = document.getElementById("btn-ob");
-        const finalScore = document.getElementById("final-score");
+        const finalAciertos = document.getElementById("final-aciertos");
+        const finalGrade = document.getElementById("final-grade");
         const resName = document.getElementById("res-name");
+        const recordsTableBody = document.getElementById("records-table-body");
+
+        // Cargar registros al iniciar la página
+        document.addEventListener("DOMContentLoaded", loadRecords);
 
         function startGame() {
             playerName = studentNameInput.value.trim();
             if (playerName === "") {
-                alert("Por favor, ingresa tu nombre para continuar.");
+                alert("Por favor, ingresa tu nombre completo para comenzar.");
                 return;
             }
 
+            // Mezcla de Fisher-Yates para obtener oraciones totalmente aleatorias
             let shuffled = [...masterQuestions];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -343,7 +448,7 @@
             const current = questions[currentIdx];
             sentenceText.textContent = `"${current.text}"`;
             progressEl.textContent = `Pregunta ${currentIdx + 1} de ${questions.length}`;
-            scoreEl.textContent = `Puntuación: ${score}`;
+            scoreEl.textContent = `Aciertos: ${score}`;
         }
 
         function checkAnswer(selectedType) {
@@ -360,7 +465,7 @@
                 feedbackEl.className = "incorrect";
             }
 
-            scoreEl.textContent = `Puntuación: ${score}`;
+            scoreEl.textContent = `Aciertos: ${score}`;
             
             if (currentIdx < questions.length - 1) {
                 nextBtn.classList.remove("hidden");
@@ -378,13 +483,53 @@
             quizBox.classList.add("hidden");
             resultBox.classList.remove("hidden");
             resName.textContent = playerName;
-            finalScore.textContent = `Has obtenido ${score} aciertos de ${questions.length} posibles.`;
+            
+            // Cálculo de nota de 0.0 a 5.0 (Regla de tres: (score * 5) / 10)
+            let grade = (score * 5.0) / 10.0;
+
+            finalAciertos.textContent = score;
+            finalGrade.textContent = grade.toFixed(1);
+
+            // Guardar en el almacenamiento local del navegador (localStorage)
+            saveRecord(playerName, score, grade.toFixed(1));
         }
 
-        function restartGame() {
+        function saveRecord(name, aciertos, grade) {
+            let records = JSON.parse(localStorage.getItem("sintaxis_records")) || [];
+            records.push({ name, aciertos, grade, date: new Date().toLocaleDateString() });
+            localStorage.setItem("sintaxis_records", JSON.stringify(records));
+            loadRecords();
+        }
+
+        function loadRecords() {
+            let records = JSON.parse(localStorage.getItem("sintaxis_records")) || [];
+            recordsTableBody.innerHTML = "";
+
+            if (records.length === 0) {
+                recordsTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">No hay registros guardados aún.</td></tr>`;
+                return;
+            }
+
+            records.forEach(rec => {
+                let row = document.tr; // syntax fix below using insertRow or innerHTML template
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #0284c7; font-weight: bold;">${rec.grade}</span></td>`;
+                recordsTableBody.appendChild(tr);
+            });
+        }
+
+        function clearRecords() {
+            if (confirm("¿Estás seguro de borrar todo el historial de notas guardadas?")) {
+                localStorage.removeItem("sintaxis_records");
+                loadRecords();
+            }
+        }
+
+        function returnHome() {
             resultBox.classList.add("hidden");
             welcomeBox.classList.remove("hidden");
             studentNameInput.value = "";
+            loadRecords();
         }
     </script>
 </body>
