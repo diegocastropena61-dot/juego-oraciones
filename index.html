@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desafío Sintáctico: Oraciones Unimembres y Bimembres</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -228,16 +232,6 @@
             color: #334155;
         }
 
-        .btn-clear {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-        }
-
         .hidden {
             display: none !important;
         }
@@ -245,7 +239,6 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- PANTALLA DE BIENVENIDA -->
         <div id="welcome-box">
             <header>
                 <h1>🎓 Desafío Sintáctico</h1>
@@ -257,11 +250,9 @@
             </div>
             <button class="btn primary" onclick="startGame()">Comenzar Reto</button>
 
-            <!-- Sección visible para el docente con los registros guardados en el navegador -->
             <div class="records-section" id="records-container">
                 <h3>
-                    <span>📋 Registros Guardados</span>
-                    <button class="btn-clear" onclick="clearRecords()">Borrar Historial</button>
+                    <span>📋 Registros en la Nube</span>
                 </h3>
                 <div class="records-table-container">
                     <table>
@@ -273,14 +264,16 @@
                             </tr>
                         </thead>
                         <tbody id="records-table-body">
-                            <!-- Los registros se cargan dinámicamente aquí -->
+                            <tr><td colspan="3" style="text-align: center; color: #94a3b8;">Cargando registros...</td></tr>
                         </tbody>
                     </table>
+                </div>
+                <div style="text-align: right; margin-top: 0.5rem;">
+                    <button onclick="clearRecordsWithPassword()" style="background: none; border: none; color: #94a3b8; font-size: 0.75rem; cursor: pointer; text-decoration: underline;">⚙️ Panel Docente (Borrar Historial)</button>
                 </div>
             </div>
         </div>
 
-        <!-- PANTALLA DE JUEGO -->
         <div id="quiz-box" class="hidden">
             <header>
                 <h1 id="greeting-title">¡Éxito!</h1>
@@ -306,7 +299,6 @@
             <button id="next-btn" class="btn next hidden" onclick="nextQuestion()">Siguiente Pregunta ➔</button>
         </div>
 
-        <!-- PANTALLA DE RESULTADOS -->
         <div id="result-box" class="hidden">
             <div class="trophy">🏆</div>
             <h2>¡Excelente trabajo, <span id="res-name"></span>!</h2>
@@ -314,12 +306,27 @@
                 <p>Aciertos totales: <span id="final-aciertos">0</span> de 10</p>
                 <p style="margin-top: 0.5rem;">Calificación definitiva: <span id="final-grade" class="grade-highlight">0.0</span> / 5.0</p>
             </div>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.2rem;">Tu resultado ha sido guardado automáticamente en este dispositivo.</p>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.2rem;">Tu resultado ha sido guardado automáticamente en la nube.</p>
             <button class="btn restart" onclick="returnHome()">Volver al Inicio 🔄</button>
         </div>
     </div>
 
     <script>
+        // Configuración de Firebase conectada con tus credenciales
+        const firebaseConfig = {
+            apiKey: "AIzaSyAl7H16GACOK5gmuYGLlXJGq66PKaC7myk",
+            authDomain: "desafio-sintactico.firebaseapp.com",
+            projectId: "desafio-sintactico",
+            storageBucket: "desafio-sintactico.firebasestorage.app",
+            messagingSenderId: "641469899597",
+            appId: "1:641469899597:web:402aa015bd7810a9e58d04",
+            measurementId: "G-50YEWEZ6QV"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         const masterQuestions = [
             // UNIMEMBRES (OU)
             { text: "¡Llueve!", type: "OU", explanation: "Es unimembre porque posee un verbo impersonal de fenómeno atmosférico, sin sujeto." },
@@ -409,7 +416,7 @@
         const resName = document.getElementById("res-name");
         const recordsTableBody = document.getElementById("records-table-body");
 
-        document.addEventListener("DOMContentLoaded", loadRecords);
+        document.addEventListener("DOMContentLoaded", loadRecordsFromFirebase);
 
         function startGame() {
             playerName = studentNameInput.value.trim();
@@ -486,36 +493,71 @@
             finalAciertos.textContent = score;
             finalGrade.textContent = grade.toFixed(1);
 
-            saveRecord(playerName, score, grade.toFixed(1));
+            saveRecordToFirebase(playerName, score, grade.toFixed(1));
         }
 
-        function saveRecord(name, aciertos, grade) {
-            let records = JSON.parse(localStorage.getItem("sintaxis_records")) || [];
-            records.push({ name, aciertos, grade, date: new Date().toLocaleDateString() });
-            localStorage.setItem("sintaxis_records", JSON.stringify(records));
-            loadRecords();
-        }
-
-        function loadRecords() {
-            let records = JSON.parse(localStorage.getItem("sintaxis_records")) || [];
-            recordsTableBody.innerHTML = "";
-
-            if (records.length === 0) {
-                recordsTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">No hay registros guardados aún.</td></tr>`;
-                return;
-            }
-
-            records.forEach(rec => {
-                let tr = document.createElement("tr");
-                tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #7e22ce; font-weight: bold;">${rec.grade}</span></td>`;
-                recordsTableBody.appendChild(tr);
+        // Guardar nota en Firebase Firestore
+        function saveRecordToFirebase(name, aciertos, grade) {
+            db.collection("sintaxis_records").add({
+                name: name,
+                aciertos: aciertos,
+                grade: grade,
+                date: new Date().toLocaleDateString()
+            })
+            .then(() => {
+                loadRecordsFromFirebase();
+            })
+            .catch((error) => {
+                console.error("Error al guardar en Firebase: ", error);
             });
         }
 
-        function clearRecords() {
-            if (confirm("¿Estás seguro de borrar todo el historial de notas guardadas?")) {
-                localStorage.removeItem("sintaxis_records");
-                loadRecords();
+        // Cargar notas desde Firebase Firestore
+        function loadRecordsFromFirebase() {
+            recordsTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">Cargando registros...</td></tr>`;
+            
+            db.collection("sintaxis_records").get().then((querySnapshot) => {
+                recordsTableBody.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    recordsTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #94a3b8;">No hay registros guardados aún.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    let rec = doc.data();
+                    let tr = document.createElement("tr");
+                    tr.innerHTML = `<td><strong>${rec.name}</strong></td><td>${rec.aciertos}/10</td><td><span style="color: #7e22ce; font-weight: bold;">${rec.grade}</span></td>`;
+                    recordsTableBody.appendChild(tr);
+                });
+            }).catch((error) => {
+                console.error("Error al leer de Firebase: ", error);
+                recordsTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ef4444;">Error al cargar registros.</td></tr>`;
+            });
+        }
+
+        // Panel docente protegido por contraseña para borrar notas de la nube
+        function clearRecordsWithPassword() {
+            let claveDocente = prompt("Ingresa tu clave de administración para borrar los registros:");
+            
+            // Puedes cambiar "profe123" por la contraseña secreta que prefieras usar
+            if (claveDocente === "profe123") {
+                if (confirm("¿Estás completamente seguro de vaciar todo el historial de la nube?")) {
+                    db.collection("sintaxis_records").get().then((querySnapshot) => {
+                        let batch = db.batch();
+                        querySnapshot.forEach((doc) => {
+                            batch.delete(doc.ref);
+                        });
+                        return batch.commit();
+                    }).then(() => {
+                        alert("¡Historial borrado con éxito!");
+                        loadRecordsFromFirebase();
+                    }).catch((error) => {
+                        console.error("Error al borrar: ", error);
+                    });
+                }
+            } else if (claveDocente !== null) {
+                alert("Contraseña incorrecta. No tienes autorización para borrar.");
             }
         }
 
@@ -523,7 +565,7 @@
             resultBox.classList.add("hidden");
             welcomeBox.classList.remove("hidden");
             studentNameInput.value = "";
-            loadRecords();
+            loadRecordsFromFirebase();
         }
     </script>
 </body>
